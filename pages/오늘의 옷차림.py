@@ -9,20 +9,20 @@ data['날짜'] = pd.to_datetime(data['날짜'], format='%Y-%m-%d')
 # Define clothing recommendations based on temperature
 def clothing_recommendation(temp):
     if temp <= 0:
-        return "Very cold: Wear heavy winter clothing, a warm coat, and thermal wear."
+        return "매우 추워요ㅠㅠ: 두꺼운 겨울 내피와 따듯한 코트, 보온성 의류를 입으세요."
     elif 0 < temp <= 10:
-        return "Cold: Wear a winter jacket, sweaters, and layered clothing."
+        return "추워요: 겨울 자켓, 스웨터와 함께 레이어드 스타일로 입어 보세요."
     elif 10 < temp <= 20:
-        return "Cool: Light jackets, long sleeves, and possibly a sweater."
+        return "시원해요~: 얇은 자켓, 긴 소매옷, 혹은 얇은 스웨터를 입어 보세요."
     elif 20 < temp <= 25:
-        return "Warm: T-shirts, light shirts, and comfortable pants."
+        return "살짝 더워요~: 티셔츠, 얇은 옷과 편한 바지를 입어 보세요."
     elif 25 < temp <= 30:
-        return "Hot: Wear short sleeves, shorts, and stay hydrated."
+        return "더워요~.~: 짧은 소매의 상의, 반바지를 입고 물을 자주 마셔주세요!"
     else:
-        return "Very hot: Wear light clothing, hats, and drink plenty of water."
+        return "쪄죽어요ㅠㅠ: 얇은 옷과 햇살을 막을 모자를 추천해요! 물을 충분히 마셔주세요~"
 
 # Streamlit UI
-st.title('Clothing Recommendation Based on Temperature')
+st.title('날짜별 옷차림 추천')
 
 # Date input
 date_input = st.date_input("Select a date", pd.to_datetime('2023-01-01'))
