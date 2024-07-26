@@ -1,6 +1,7 @@
 import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
+import numpy as np
 
 # Load the data
 data = pd.read_csv('daily_temp.csv')
@@ -29,9 +30,9 @@ chart_type = st.radio(
 if chart_type == 'Line Chart':
     st.write("### Line Chart of Annual Temperature Trends")
     fig, ax = plt.subplots()
-    ax.plot(annual_data['year'], annual_data['평균기온(℃)'], label='Average Temperature (°C)')
-    ax.plot(annual_data['year'], annual_data['최저기온(℃)'], label='Minimum Temperature (°C)')
-    ax.plot(annual_data['year'], annual_data['최고기온(℃)'], label='Maximum Temperature (°C)')
+    ax.plot(annual_data['year'], annual_data['평균기온(℃)'], label='Average Temperature (°C)', marker='o')
+    ax.plot(annual_data['year'], annual_data['최저기온(℃)'], label='Minimum Temperature (°C)', marker='o')
+    ax.plot(annual_data['year'], annual_data['최고기온(℃)'], label='Maximum Temperature (°C)', marker='o')
     ax.set_xlabel('Year')
     ax.set_ylabel('Temperature (°C)')
     ax.legend()
@@ -40,10 +41,17 @@ if chart_type == 'Line Chart':
 elif chart_type == 'Bar Chart':
     st.write("### Bar Chart of Annual Temperature Trends")
     fig, ax = plt.subplots()
-    ax.bar(annual_data['year'], annual_data['평균기온(℃)'], label='Average Temperature (°C)')
-    ax.bar(annual_data['year'], annual_data['최저기온(℃)'], label='Minimum Temperature (°C)')
-    ax.bar(annual_data['year'], annual_data['최고기온(℃)'], label='Maximum Temperature (°C)')
+    bar_width = 0.25  # Width of each bar
+    index = np.arange(len(annual_data['year']))  # X locations for the groups
+
+    # Create bars for each temperature type
+    bar1 = ax.bar(index - bar_width, annual_data['평균기온(℃)'], bar_width, label='Average Temperature (°C)')
+    bar2 = ax.bar(index, annual_data['최저기온(℃)'], bar_width, label='Minimum Temperature (°C)')
+    bar3 = ax.bar(index + bar_width, annual_data['최고기온(℃)'], bar_width, label='Maximum Temperature (°C)')
+
     ax.set_xlabel('Year')
     ax.set_ylabel('Temperature (°C)')
+    ax.set_xticks(index)
+    ax.set_xticklabels(annual_data['year'])
     ax.legend()
     st.pyplot(fig)
