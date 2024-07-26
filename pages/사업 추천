@@ -1,0 +1,53 @@
+import pandas as pd
+
+# CSV 파일 로드
+file_path = '/mnt/data/지난_1년_동안_가장_많이_참여한_여가활동__12345순위__중분류_20240726162242.csv'
+data = pd.read_csv(file_path, encoding='utf-8')
+
+# 데이터 확인
+print(data.head())
+import streamlit as st
+
+# 성별, 연령별, 17개 시도별 옵션
+genders = data['성별'].unique()
+ages = data['연령대'].unique()
+regions = data['시도'].unique()
+
+# 사이드바에 선택 항목 추가
+selected_gender = st.sidebar.selectbox('성별을 선택하세요', genders)
+selected_age = st.sidebar.selectbox('연령대를 선택하세요', ages)
+selected_region = st.sidebar.selectbox('시도를 선택하세요', regions)
+
+# 선택된 조건에 따라 필터링
+filtered_data = data[(data['성별'] == selected_gender) & 
+                     (data['연령대'] == selected_age) & 
+                     (data['시도'] == selected_region)]
+
+# 필터링된 데이터 표시
+st.write(filtered_data)
+# 여가활동 분류
+leisure_categories = ['휴식활동', '취미오락활동', '사회및 기타활동', '스포츠참여활동', 
+                      '관광활동', '스포츠관람활동', '문화예술관람활동', '문화예술참여활동']
+
+# 각 여가활동에 따른 추천 사업 아이템
+business_ideas = {
+    '휴식활동': ['스파 센터', '마사지 샵', '명상 및 요가 스튜디오'],
+    '취미오락활동': ['보드게임 카페', '취미 교실', '온라인 게임 플랫폼'],
+    '사회및 기타활동': ['커뮤니티 센터', '사회적 기업', '봉사활동 플랫폼'],
+    '스포츠참여활동': ['헬스장', '스포츠 클럽', '피트니스 앱'],
+    '관광활동': ['여행사', '에어비앤비 호스트', '지역 관광 투어'],
+    '스포츠관람활동': ['스포츠 바', '경기장', '온라인 스포츠 스트리밍 서비스'],
+    '문화예술관람활동': ['극장', '미술관', '공연 기획사'],
+    '문화예술참여활동': ['공방', '댄스 스튜디오', '음악 학원']
+}
+
+# 추천 함수
+def recommend_business_idea(activity):
+    return business_ideas.get(activity, [])
+
+# 주요 여가활동에 따른 추천 사업 아이템 표시
+main_activity = filtered_data['주된 여가활동'].values[0]  # 예시로 첫 번째 여가활동을 사용
+recommended_ideas = recommend_business_idea(main_activity)
+st.write(f"주된 여가활동: {main_activity}")
+st.write("추천 사업 아이템:")
+st.write(recommended_ideas)
